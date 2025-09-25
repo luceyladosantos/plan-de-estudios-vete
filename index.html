@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Malla interactiva - Plan de estudios</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Malla interactiva — Plan de estudios</h1>
+    <p>Marca materias como aprobadas o regularizadas para ver cuáles podés cursar.</p>
+  </header>
+
+  <main id="malla">
+    <!-- Las columnas por año se generarán desde script.js -->
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <button id="modal-close" class="close">&times;</button>
+      <h2 id="modal-title"></h2>
+      <p><strong>Año:</strong> <span id="modal-year"></span></p>
+      <p><strong>Correlativas:</strong></p>
+      <ul id="modal-prereqs"></ul>
+      <div class="modal-actions">
+        <button id="btn-toggle-approved" class="btn">Marcar como aprobada</button>
+        <button id="btn-toggle-regular" class="btn secondary">Marcar como regularizada</button>
+      </div>
+      <p class="hint">Estado actual: <span id="modal-status"></span></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
