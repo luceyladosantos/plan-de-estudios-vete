@@ -9,25 +9,43 @@
 <body>
   <header>
     <h1>Malla interactiva — Plan de estudios</h1>
-    <p>Marca materias como aprobadas o regularizadas para ver cuáles podés cursar.</p>
+    <p>Columnas por año • Fondo rosita pastel • Click en materia → modal • Marcar Aprobada / Regularizada</p>
+    <div class="top-controls">
+      <button id="btn-reset" class="btn small">Resetear estado</button>
+    </div>
   </header>
 
-  <main id="malla">
-    <!-- Las columnas por año se generarán desde script.js -->
+  <main class="container">
+    <aside class="sidebar">
+      <h3>Pegar correlativas (formato numérico)</h3>
+      <p class="muted">Formato por línea:<br><code>7: 2(A), 6(R)</code>  —  Alternativas: <code>OR</code> o <code>ó</code>. Para exigir todo un año: <code>30: ALL 3</code>.</p>
+      <textarea id="correl-text" placeholder="Ej:&#10;7: 2(A), 6(R)&#10;15: 10(A) OR 12(R)&#10;33: ALL 3" rows="10"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button id="btn-apply" class="btn">Aplicar correlativas</button>
+        <button id="btn-fill-sample" class="btn secondary">Autocompletar (ejemplo)</button>
+      </div>
+      <p class="muted small">Después de aplicar, hace refresh visual en la malla.</p>
+    </aside>
+
+    <section id="malla" class="malla">
+      <!-- columnas por año generadas desde script.js -->
+    </section>
   </main>
 
   <!-- Modal -->
   <div id="modal" class="modal hidden" role="dialog" aria-hidden="true">
     <div class="modal-content">
-      <button id="modal-close" class="close">&times;</button>
+      <button id="modal-close" class="close" aria-label="Cerrar">&times;</button>
       <h2 id="modal-title"></h2>
-      <p><strong>Año:</strong> <span id="modal-year"></span></p>
+      <p><strong>Nº:</strong> <span id="modal-num"></span> · <strong>Año:</strong> <span id="modal-year"></span></p>
       <p><strong>Correlativas:</strong></p>
       <ul id="modal-prereqs"></ul>
+
       <div class="modal-actions">
         <button id="btn-toggle-approved" class="btn">Marcar como aprobada</button>
         <button id="btn-toggle-regular" class="btn secondary">Marcar como regularizada</button>
       </div>
+
       <p class="hint">Estado actual: <span id="modal-status"></span></p>
     </div>
   </div>
