@@ -20,34 +20,70 @@ body{
   color:var(--text);
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
-  padding:28px;
+  padding:20px;
 }
 
 /* Header */
 header{
-  text-align:center;
-  margin-bottom:20px;
+  text-align:left;
+  margin-bottom:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
 }
 header h1{
-  margin:0 0 6px;
-  font-size:1.6rem;
+  margin:0;
+  font-size:1.3rem;
   color:#333;
 }
 header p{margin:0;color:var(--muted)}
+.top-controls { display:flex; gap:8px; align-items:center; }
+
+/* Layout */
+.container{
+  display:flex;
+  gap:18px;
+  align-items:flex-start;
+}
+
+/* Sidebar */
+.sidebar{
+  width:320px;
+  background:rgba(255,255,255,0.92);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  box-shadow:var(--shadow);
+}
+.sidebar h3{ margin:0 0 8px }
+.muted{ color:var(--muted); font-size:0.9rem }
+.small{ font-size:0.85rem }
+
+/* Textarea */
+textarea{
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  font-family:monospace;
+  resize:vertical;
+}
 
 /* Malla container: columns per year */
-#malla{
+.malla{
   display:flex;
   gap:16px;
   align-items:flex-start;
   overflow:auto;
-  padding:12px;
+  padding:4px;
+  flex:1;
 }
 
 /* Each year column */
 .year-column{
   min-width:220px;
-  background:rgba(255,255,255,0.85);
+  background:rgba(255,255,255,0.95);
   border:1px solid var(--border);
   border-radius:12px;
   padding:12px;
@@ -144,6 +180,7 @@ header p{margin:0;color:var(--muted)}
   background:var(--accent);
   color:white;
 }
+.btn.small{ padding:6px 8px; font-size:0.9rem; border-radius:8px }
 .btn.secondary{
   background:transparent;
   border:2px solid var(--accent);
@@ -152,7 +189,9 @@ header p{margin:0;color:var(--muted)}
 .hint{ margin-top:10px; color:var(--muted); font-size:0.9rem }
 
 /* Responsive */
-@media (max-width:800px){
-  #malla{ flex-direction:column; }
+@media (max-width:1000px){
+  .container{ flex-direction:column; }
+  .sidebar{ width:100% }
+  .malla{ flex-direction:column; }
   .year-column{ width:100% }
 }
