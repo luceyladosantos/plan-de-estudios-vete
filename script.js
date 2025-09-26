@@ -1,253 +1,197 @@
-/* ========= Datos del plan =========
-   Lista de materias extraídas del documento. 
-   Cada materia: id (único), name, year (número), prereqs (array de ids).
-   REGLA: una materia se puede cursar si todos sus prereqs están aprobados o regularizados.
-*/
-
-const materias = [
-  /* 1º AÑO */
-  { id: "ICB", name: "I.C.B.", year: 1, prereqs: [] },
-  { id: "ANAT1", name: "Anatomía I", year: 1, prereqs: [] },
-  { id: "BIOEST", name: "Bioestadística", year: 1, prereqs: [] },
-  { id: "BIOFIS", name: "Biofísica", year: 1, prereqs: [] },
-  { id: "BIOQUIM", name: "Bioquímica", year: 1, prereqs: [] },
-  { id: "HISTEMB", name: "Histología y Embriología", year: 1, prereqs: [] },
-
-  /* 2º AÑO */
-  { id: "ANAT2", name: "Anatomía II", year: 2, prereqs: ["ANAT1"] },
-  { id: "BIENESTAR", name: "Bienestar Animal", year: 2, prereqs: [] },
-  { id: "FISIO", name: "Fisiología", year: 2, prereqs: ["BIOQUIM","BIOFIS"] },
-  { id: "GENET", name: "Genética", year: 2, prereqs: ["BIOQUIM"] },
-  { id: "INGTEC", name: "Inglés Técnico", year: 2, prereqs: [] },
-  { id: "MICRO", name: "Microbiología", year: 2, prereqs: ["BIOQUIM"] },
-  { id: "SOCIO", name: "Sociología Rural y Urbana", year: 2, prereqs: [] },
-  { id: "ZOO", name: "Zoología y Ecología", year: 2, prereqs: [] },
-
-  /* 3º AÑO */
-  { id: "EPID", name: "Epidemiología", year: 3, prereqs: ["BIOEST"] },
-  { id: "FARMA", name: "Farmacología y Toxicología", year: 3, prereqs: ["FISIO","MICRO"] },
-  { id: "INMUNO", name: "Inmunología", year: 3, prereqs: ["MICRO"] },
-  { id: "INTRO_PROD", name: "Introducción a la Producción Animal", year: 3, prereqs: [] },
-  { id: "NUTRIC", name: "Nutrición y Alimentación", year: 3, prereqs: ["BIOQUIM"] },
-  { id: "PATOLOG_GS", name: "Patología General y Sistemática", year: 3, prereqs: ["ANAT2","FISIO"] },
-  { id: "SEMINO", name: "Seminología", year: 3, prereqs: ["ANAT2"] },
-  { id: "TALLER_INTEGR", name: "Taller de Integración del Ciclo Básico", year: 3, prereqs: ["ICB"] },
-
-  /* 4º AÑO */
-  { id: "CIRUGIA", name: "Cirugía y Anestesiología", year: 4, prereqs: ["ANAT2","PATOLOG_GS"] },
-  { id: "ECON", name: "Economía", year: 4, prereqs: [] },
-  { id: "INFEC", name: "Enfermedades Infecciosas", year: 4, prereqs: ["MICRO","PATOLOG_GS"] },
-  { id: "PARASIT", name: "Enfermedades Parasitarias", year: 4, prereqs: ["MICRO"] },
-  { id: "PATO_MED", name: "Patología Médica", year: 4, prereqs: ["PATOLOG_GS"] },
-  { id: "PATO_QUIR", name: "Patología Quirúrgica", year: 4, prereqs: ["CIRUGIA","PATOLOG_GS"] },
-
-  /* 5º AÑO */
-  { id: "BROMATO", name: "Bromatología e Higiene Alimentaria", year: 5, prereqs: ["BIOQUIM"] },
-  { id: "CLIN_GRAN", name: "Clínica de Grandes Animales", year: 5, prereqs: ["CIRUGIA","PATO_MED"] },
-  { id: "CLIN_PEQ", name: "Clínica de Pequeños Animales", year: 5, prereqs: ["CIRUGIA","PATO_MED"] },
-  { id: "MED_LEGAL", name: "Medicina Legal y Deontología", year: 5, prereqs: [] },
-  { id: "PROD_AVES", name: "Producción de Aves", year: 5, prereqs: ["INTRO_PROD","NUTRIC"] },
-  { id: "PROD_BOV", name: "Producción Bovina", year: 5, prereqs: ["INTRO_PROD"] },
-  { id: "PROD_RUM", name: "Producción de Pequeños Rumiantes y Cerdos", year: 5, prereqs: ["INTRO_PROD"] },
-  { id: "PROD_NOTRAD", name: "Producción No Tradicional", year: 5, prereqs: ["INTRO_PROD"] },
-  { id: "SALUD_PUBLICA", name: "Salud Pública", year: 5, prereqs: ["BROMATO"] },
-  { id: "TEC_ALIM", name: "Tecnología de los Alimentos", year: 5, prereqs: ["BROMATO"] },
-  { id: "TALLER_PRACT", name: "Taller de Prácticas Profesionales", year: 5, prereqs: [] }
-];
-
-/* ====== Estado del usuario (aprobadas / regularizadas) ======
-   Guardado en localStorage para persistencia.
-*/
-const STORAGE_KEY = "malla_estado_v1";
-
-let estado = {}; // { "ICB": { approved: false, regular: false }, ... }
-
-function cargarEstadoInicial() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) {
-    try {
-      estado = JSON.parse(raw);
-      return;
-    } catch(e){}
-  }
-  materias.forEach(m => {
-    estado[m.id] = { approved: false, regular: false };
-  });
-  guardarEstado();
-}
-function guardarEstado() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+:root{
+  --bg: #ffeef4;        /* rosita pastel claro */
+  --card: #ffffff;
+  --border: #f0dbe4;
+  --available: #29a745; /* verde */
+  --not-available: #bdbdbd; /* gris */
+  --accent: #ff98b6;
+  --text: #2d2d2d;
+  --muted: #666;
+  --shadow: 0 6px 18px rgba(0,0,0,0.06);
+  --radius: 12px;
+  font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* ====== Lógica para determinar si una materia puede cursarse ======
-   Una materia es 'disponible' si todos sus prereqs tienen approved === true OR regular === true.
-*/
-function puedeCursar(materia) {
-  if (!materia.prereqs || materia.prereqs.length === 0) return true;
-  return materia.prereqs.every(pid => {
-    const s = estado[pid];
-    return s && (s.approved || s.regular);
-  });
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background: linear-gradient(180deg, var(--bg), #fff);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding:20px;
 }
 
-/* ====== Renderizado de la malla ====== */
-const mallaEl = document.getElementById("malla");
+/* Header */
+header{
+  text-align:left;
+  margin-bottom:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+header h1{
+  margin:0;
+  font-size:1.3rem;
+  color:#333;
+}
+header p{margin:0;color:var(--muted)}
+.top-controls { display:flex; gap:8px; align-items:center; }
 
-function agruparPorAnios() {
-  const años = {};
-  materias.forEach(m => {
-    años[m.year] = años[m.year] || [];
-    años[m.year].push(m);
-  });
-  return Object.keys(años).sort((a,b)=>a-b).map(y => ({ year: Number(y), items: años[y] }));
+/* Layout */
+.container{
+  display:flex;
+  gap:18px;
+  align-items:flex-start;
 }
 
-function crearPill(text, className) {
-  const span = document.createElement("span");
-  span.className = `pill ${className}`;
-  span.textContent = text;
-  return span;
+/* Sidebar */
+.sidebar{
+  width:320px;
+  background:rgba(255,255,255,0.92);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  box-shadow:var(--shadow);
+}
+.sidebar h3{ margin:0 0 8px }
+.muted{ color:var(--muted); font-size:0.9rem }
+.small{ font-size:0.85rem }
+
+/* Textarea */
+textarea{
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  font-family:monospace;
+  resize:vertical;
 }
 
-function renderizarMalla() {
-  mallaEl.innerHTML = "";
-  const grupos = agruparPorAnios();
-  grupos.forEach(g => {
-    const col = document.createElement("section");
-    col.className = "year-column";
-    const h = document.createElement("h3");
-    h.textContent = `${g.year}º Año`;
-    col.appendChild(h);
-
-    g.items.forEach(m => {
-      const sub = document.createElement("div");
-      sub.className = "subject";
-      sub.dataset.id = m.id;
-
-      // left
-      const left = document.createElement("div");
-      left.className = "sub-left";
-      const name = document.createElement("div");
-      name.className = "sub-name";
-      name.textContent = m.name;
-      const meta = document.createElement("div");
-      meta.className = "sub-meta";
-      meta.textContent = m.prereqs.length ? `Correlativas: ${m.prereqs.join(", ")}` : "Sin correlativas";
-      left.appendChild(name);
-      left.appendChild(meta);
-
-      // right: pill showing if available or not
-      const right = document.createElement("div");
-      const available = puedeCursar(m);
-      const pill = document.createElement("span");
-      pill.className = `pill ${available ? "available" : "not-available"}`;
-      pill.textContent = available ? "Disponible" : "No disponible";
-
-      // add approved small marker
-      const approvedState = estado[m.id] && estado[m.id].approved;
-      const regularState = estado[m.id] && estado[m.id].regular;
-      if (approvedState) {
-        const approvedSpan = document.createElement("span");
-        approvedSpan.className = "approved-indicator";
-        approvedSpan.textContent = "Aprob.";
-        left.appendChild(approvedSpan);
-      } else if (regularState) {
-        const regSpan = document.createElement("span");
-        regSpan.className = "approved-indicator";
-        regSpan.style.color="#ff8fbf";
-        regSpan.textContent = "Regular.";
-        left.appendChild(regSpan);
-      }
-
-      right.appendChild(pill);
-      sub.appendChild(left);
-      sub.appendChild(right);
-
-      // click handler -> abrir modal
-      sub.addEventListener("click", ()=> openModal(m.id));
-
-      col.appendChild(sub);
-    });
-
-    mallaEl.appendChild(col);
-  });
+/* Malla container: columns per year */
+.malla{
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  overflow:auto;
+  padding:4px;
+  flex:1;
 }
 
-/* ===== Modal management ===== */
-const modal = document.getElementById("modal");
-const modalTitle = document.getElementById("modal-title");
-const modalYear = document.getElementById("modal-year");
-const modalPrereqs = document.getElementById("modal-prereqs");
-const modalStatus = document.getElementById("modal-status");
-const btnClose = document.getElementById("modal-close");
-const btnToggleApproved = document.getElementById("btn-toggle-approved");
-const btnToggleRegular = document.getElementById("btn-toggle-regular");
-
-let currentModalId = null;
-
-function openModal(id) {
-  currentModalId = id;
-  const m = materias.find(x=>x.id===id);
-  modalTitle.textContent = m.name;
-  modalYear.textContent = m.year + "º";
-  modalPrereqs.innerHTML = "";
-  if (m.prereqs.length === 0) {
-    const li = document.createElement("li");
-    li.textContent = "Sin correlativas";
-    modalPrereqs.appendChild(li);
-  } else {
-    m.prereqs.forEach(pid => {
-      const mat = materias.find(x=>x.id===pid);
-      const li = document.createElement("li");
-      li.textContent = `${pid} — ${mat ? mat.name : ""}`;
-      modalPrereqs.appendChild(li);
-    });
-  }
-  updateModalStatus();
-  modal.classList.remove("hidden");
-  modal.setAttribute("aria-hidden", "false");
+/* Each year column */
+.year-column{
+  min-width:220px;
+  background:rgba(255,255,255,0.95);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  box-shadow:var(--shadow);
+}
+.year-column h3{
+  margin:0 0 8px;
+  font-size:1.05rem;
+  color:var(--accent);
+  text-align:center;
 }
 
-function closeModal() {
-  modal.classList.add("hidden");
-  modal.setAttribute("aria-hidden", "true");
-  currentModalId = null;
+/* Subject card */
+.subject{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  padding:10px;
+  margin:9px 0;
+  border-radius:10px;
+  background:linear-gradient(180deg, #fff, #fff);
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:transform .12s ease, box-shadow .12s ease;
+  user-select:none;
+}
+.subject:hover{ transform:translateY(-4px); box-shadow:0 10px 20px rgba(0,0,0,0.06) }
+
+/* Name and small meta */
+.sub-left{
+  display:flex;
+  flex-direction:column;
+}
+.sub-name{ font-weight:600; font-size:0.95rem; color:#2b2b2b }
+.sub-meta{ font-size:0.78rem; color:var(--muted) }
+
+/* status pill */
+.pill{
+  padding:6px 8px;
+  border-radius:999px;
+  font-weight:600;
+  font-size:0.78rem;
+  color:white;
+  min-width:56px;
+  text-align:center;
 }
 
-function updateModalStatus() {
-  if (!currentModalId) return;
-  const s = estado[currentModalId];
-  modalStatus.textContent = s.approved ? "Aprobada" : (s.regular ? "Regularizada" : "No cursada");
-  btnToggleApproved.textContent = s.approved ? "Desmarcar aprobada" : "Marcar como aprobada";
-  btnToggleRegular.textContent = s.regular ? "Quitar regular" : "Marcar como regularizada";
+/* Colors depending on state - default is not available */
+.available{ background:var(--available) }
+.not-available{ background:var(--not-available) }
+.approved-indicator{ margin-left:8px; color:var(--available); font-weight:700 }
+
+/* Modal */
+.modal{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,0.35);
+  z-index:999;
 }
+.modal.hidden{ display:none }
+.modal-content{
+  width: min(520px, 96%);
+  background:var(--card);
+  border-radius:12px;
+  padding:18px;
+  box-shadow:var(--shadow);
+  position:relative;
+}
+.close{
+  position:absolute;
+  top:10px;
+  right:10px;
+  border:none;
+  background:transparent;
+  font-size:20px;
+  cursor:pointer;
+  color:var(--muted);
+}
+.modal-actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+}
+.btn{
+  padding:10px 12px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  background:var(--accent);
+  color:white;
+}
+.btn.small{ padding:6px 8px; font-size:0.9rem; border-radius:8px }
+.btn.secondary{
+  background:transparent;
+  border:2px solid var(--accent);
+  color:var(--accent);
+}
+.hint{ margin-top:10px; color:var(--muted); font-size:0.9rem }
 
-btnClose.addEventListener("click", closeModal);
-modal.addEventListener("click", (e)=>{
-  if (e.target === modal) closeModal();
-});
-
-btnToggleApproved.addEventListener("click", ()=>{
-  if (!currentModalId) return;
-  estado[currentModalId].approved = !estado[currentModalId].approved;
-  // if approved, clear regular (makes sense)
-  if (estado[currentModalId].approved) estado[currentModalId].regular = false;
-  guardarEstado();
-  updateModalStatus();
-  renderizarMalla();
-});
-
-btnToggleRegular.addEventListener("click", ()=>{
-  if (!currentModalId) return;
-  estado[currentModalId].regular = !estado[currentModalId].regular;
-  // if regular set, do not auto-change approved
-  guardarEstado();
-  updateModalStatus();
-  renderizarMalla();
-});
-
-/* ===== Inicialización ===== */
-(function init(){
-  cargarEstadoInicial();
-  renderizarMalla();
-})();
+/* Responsive */
+@media (max-width:1000px){
+  .container{ flex-direction:column; }
+  .sidebar{ width:100% }
+  .malla{ flex-direction:column; }
+  .year-column{ width:100% }
+}
